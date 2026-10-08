@@ -1,0 +1,29 @@
+# Python virtual environment
+
+backend/venv/
+
+# Python cache
+
+**pycache**/
+\*.pyc
+
+# React dependencies
+
+frontend/node_modules/
+
+# React build
+
+frontend/dist/
+
+# Django database
+
+backend/config/db.sqlite3
+
+# Django media
+
+backend/config/media/
+
+# Environment variables
+
+.env
+\*.env
