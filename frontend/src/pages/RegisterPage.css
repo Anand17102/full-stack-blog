@@ -1,0 +1,22 @@
+.register-page {
+  position: relative;
+  isolation: isolate;
+}
+
+.register-page::before {
+  position: absolute;
+  z-index: -1;
+  top: 20px;
+  left: -82px;
+  width: 140px;
+  height: 140px;
+  border-radius: 42% 58% 62% 38%;
+  background: linear-gradient(145deg, rgba(233, 133, 104, 0.16), rgba(233, 133, 104, 0));
+  content: "";
+  transform: rotate(-18deg);
+  pointer-events: none;
+}
+
+.register-page .form-card {
+  border-top: 3px solid #df9c79;
+}

@@ -1,0 +1,24 @@
+.login-page {
+  position: relative;
+  isolation: isolate;
+}
+
+.login-page::before {
+  position: absolute;
+  z-index: -1;
+  top: 88px;
+  right: -116px;
+  width: 180px;
+  height: 180px;
+  border: 1px solid rgba(66, 107, 80, 0.13);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 18px rgba(66, 107, 80, 0.025),
+    0 0 0 42px rgba(66, 107, 80, 0.025);
+  content: "";
+  pointer-events: none;
+}
+
+.login-page .form-card {
+  border-top: 3px solid #789477;
+}

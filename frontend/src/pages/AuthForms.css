@@ -1,0 +1,100 @@
+.page-wrap.narrow {
+  max-width: 500px;
+  margin: 64px auto 86px;
+}
+
+.narrow .page-heading {
+  font-size: clamp(37px, 5vw, 52px);
+  letter-spacing: -2.7px;
+}
+
+.narrow .page-subtitle {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.narrow .form-card {
+  margin-top: 27px;
+  padding: 29px;
+}
+
+.form-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.form-field label {
+  color: #41483f;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.form-field input {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid #e2e5dc;
+  border-radius: 13px;
+  outline: 0;
+  padding: 12px 14px;
+  color: var(--ink);
+  background: #fffefa;
+  font-size: 13px;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.form-field input:focus {
+  border-color: #9ab29a;
+  box-shadow: 0 0 0 4px rgba(66, 107, 80, 0.08);
+}
+
+.inline-note {
+  margin: 1px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.inline-note a {
+  color: var(--green);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.inline-note a:hover {
+  text-decoration: underline;
+}
+
+.narrow .form-card > .button {
+  width: 100%;
+  margin-top: 2px;
+}
+
+@media (max-width: 680px) {
+  .page-wrap.narrow {
+    margin: 38px auto 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .narrow .form-card {
+    padding: 23px 18px;
+  }
+}
+
+@media (max-width: 380px) {
+  .narrow .page-heading {
+    font-size: 35px;
+    letter-spacing: -2px;
+  }
+
+  .narrow .form-card {
+    padding: 20px 14px;
+  }
+}
