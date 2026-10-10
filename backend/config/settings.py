@@ -27,9 +27,9 @@ SECRET_KEY = 'django-insecure-c0rkr(tg$1^swh0jr)g9667(+=d5v9@y3extp^b_)n(4t$(5+^
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "https://full-stack-blog-19zm.onrender.com/",
-    " http://localhost:5173/",
-    "http://127.0.0.1:8000/"
+    "full-stack-blog-19zm.onrender.com/",
+    " localhost:",
+    "127.0.0.1:"
     
     
 ]
