@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const baseURL =
-  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://full-stack-blog-19zm.onrender.com/api";
 
 const publicApi = axios.create({ baseURL });
 const authenticatedApi = axios.create({ baseURL });
