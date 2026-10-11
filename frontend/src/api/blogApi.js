@@ -14,20 +14,11 @@ const notifyAuthChange = () => {
   window.dispatchEvent(new Event("authchange"));
 };
 
-// Add access token to authenticated requests
-authenticatedApi.interceptors.request.use((config) => {
-  const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
-
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
-  }
-
-  return config;
-});
-
 // Save tokens
 const saveTokens = (tokens) => {
-  localStorage.setItem(ACCESS_TOKEN_KEY, tokens.access);
+  if (tokens.access) {
+    localStorage.setItem(ACCESS_TOKEN_KEY, tokens.access);
+  }
 
   if (tokens.refresh) {
     localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refresh);
@@ -85,20 +76,86 @@ export const loginUser = (credentials) =>
   publicApi.post("/login/", credentials).then(({ data }) => {
     saveTokens(data);
     localStorage.setItem("username", credentials.username);
+    notifyAuthChange();
     return data;
   });
 
+// Refresh token with duplicate-request protection
+let refreshPromise = null;
+
 export const refreshAccessToken = () => {
+  if (refreshPromise) return refreshPromise;
+
   const refresh = localStorage.getItem(REFRESH_TOKEN_KEY);
 
   if (!refresh) {
+    clearTokens();
     return Promise.reject(new Error("No refresh token is available."));
   }
 
-  return publicApi
+  refreshPromise = publicApi
     .post("/token/refresh/", { refresh })
-    .then(({ data }) => saveTokens(data));
+    .then(({ data }) => {
+      if (!data.access) {
+        throw new Error("Refresh response did not contain an access token.");
+      }
+
+      return saveTokens(data);
+    })
+    .catch((error) => {
+      // An invalid refresh token cannot recover this session.
+      clearTokens();
+      throw error;
+    })
+    .finally(() => {
+      refreshPromise = null;
+    });
+
+  return refreshPromise;
 };
+
+// Automatically attach access tokens
+authenticatedApi.interceptors.request.use((config) => {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+
+  return config;
+});
+
+// Automatically refresh once after an unauthorized response
+authenticatedApi.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (
+      error.response?.status !== 401 ||
+      !originalRequest ||
+      originalRequest._retry ||
+      originalRequest.url?.includes("/token/refresh/") ||
+      originalRequest.url?.includes("/login/") ||
+      originalRequest.url?.includes("/logout/")
+    ) {
+      return Promise.reject(error);
+    }
+
+    originalRequest._retry = true;
+
+    try {
+      const tokens = await refreshAccessToken();
+
+      originalRequest.headers = originalRequest.headers || {};
+      originalRequest.headers.Authorization = `Bearer ${tokens.access}`;
+
+      return authenticatedApi(originalRequest);
+    } catch (refreshError) {
+      return Promise.reject(refreshError);
+    }
+  },
+);
 
 export const logoutUser = async () => {
   const refresh = localStorage.getItem(REFRESH_TOKEN_KEY);
