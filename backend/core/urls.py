@@ -1,6 +1,4 @@
 from django.urls import path
-from django.conf import settings
-from django.conf.urls.static import static
 from .views import (
     blog_comments,
     blog_create,
@@ -23,5 +21,3 @@ urlpatterns = [
     path('blogs/<int:pk>/like/', blog_like, name='blog-like'),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
